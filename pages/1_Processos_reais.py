@@ -242,7 +242,9 @@ def aba_estrutural(proc):
     } for p, c in cap.items()]), hide_index=True, width="stretch")
     nota = ("O mínimo de cada grupo é calculado em relação à capacidade atual dos outros: muda quando você muda "
             "a quantidade de outro grupo. Com os grupos quase equilibrados, o arredondamento para inteiros faz "
-            "os mínimos subirem juntos.")
+            "os mínimos subirem juntos. Atenção: o mínimo estrutural garante que a vazão média não fica limitada, "
+            "mas não zera a espera quando as entidades chegam em lotes (como os caminhões do M4); para isso, "
+            "use a simulação (aba Quantos trabalhadores?).")
     limitados = [p for p, c in cap.items() if c != float("inf")]
     if len(limitados) == 2:  # com dois grupos, a proporção que os equilibra é a razão entre as cargas de trabalho
         a, b = sorted(limitados, key=lambda p: -est["cargas"][p])

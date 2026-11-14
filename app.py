@@ -22,19 +22,6 @@ with open("style.css", encoding="utf-8") as f:
     ui.html(f"<style>{ui.css_do_tema()}{f.read()}</style>")
 
 
-def cabecalho():
-    ui.html("""
-    <div class="main-title">
-      <div class="eyebrow">ECOMUP · Trabalho de Graduação · Engenharia de Computação</div>
-      <h1>Estudo Computacional de Otimização em Metodologias Utilizadas em Processos Industriais</h1>
-      <div class="subtitle">
-        Simulador de fluxo de paletes em um armazém industrial — encontra
-        <b>onde o processo trava (gargalo)</b> e <b>quanto isso custa em tempo de espera</b>.
-      </div>
-      <div class="authors">Miguel de Paulo Leite de Oliveira · Pedro Lauria Nassif · Orientador: Prof. Me. Julio Cesar Gonçalves</div>
-    </div>""")
-
-
 def passo(numero: int, titulo: str, ajuda: str = ""):
     ui.html(f'<div class="step-title"><span class="step-num">{numero}</span>{titulo}</div>'
             f'<div class="step-help">{ajuda}</div>')
@@ -226,7 +213,9 @@ def aba_tecnico(resultado, linha, logs, params):
 
 
 def main():
-    cabecalho()
+    ui.cabecalho("Modelos base M1 a M3",
+                 "Simulador de fluxo de paletes em um armazém industrial: encontra <b>onde o processo trava "
+                 "(gargalo)</b> e <b>quanto isso custa em tempo de espera</b>.")
     p = barra_lateral()
     estado = st.session_state
 

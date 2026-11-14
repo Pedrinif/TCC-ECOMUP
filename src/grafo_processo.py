@@ -26,9 +26,9 @@ LIMIAR_MEDIA = 0.60   # utilização a partir da qual o vértice fica amarelo
 LIMIAR_ALTA = 0.85    # ... e vermelho (só colore o grafo; o gargalo é decidido pela espera)
 
 COR = {
-    "neutro": "#388bfd", "baixa": "#3fb950", "media": "#d29922", "alta": "#f85149",
-    "trabalhador": "#8b949e", "borda": "#30363d", "gargalo": "#f85149", "estrutural": "#f0883e",
-    "critico": "#f85149", "seta": "#58a6ff", "pool_seta": "#6e7681",
+    "neutro": "#2a78d6", "baixa": "#35b235", "media": "#fab219", "alta": "#d03b3b",
+    "trabalhador": "#7b8594", "borda": "#3a4350", "gargalo": "#d03b3b", "estrutural": "#ec835a",
+    "critico": "#d03b3b", "seta": "#5b9df0", "pool_seta": "#7b8594",
 }
 
 

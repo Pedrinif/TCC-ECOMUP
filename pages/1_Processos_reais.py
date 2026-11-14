@@ -100,11 +100,12 @@ def assinatura(proc, op) -> str:
 # ---------------------------------------------------------------- desenho
 def desenhar(g: dict, altura: int = 560):
     p = ui.paleta()
-    net = Network(height=f"{altura}px", width="100%", bgcolor=p["surface"], font_color=p["text-strong"], directed=True)
+    # sem font_color aqui: o pyvis usaria a mesma cor em todos os nós e ignoraria a cor de texto de cada um
+    net = Network(height=f"{altura}px", width="100%", bgcolor=p["surface"], directed=True)
     net.set_options("""{
       "physics": {"enabled": false},
       "edges": {"smooth": {"type": "cubicBezier", "forceDirection": "horizontal", "roundness": 0.4}},
-      "nodes": {"font": {"size": 13}},
+      "nodes": {"font": {"size": 13, "face": "IBM Plex Sans"}},
       "interaction": {"hover": true, "tooltipDelay": 150, "zoomView": true, "dragView": true}
     }""")
     claros = (COR["neutro"], COR["alta"], COR["trabalhador"])
@@ -112,10 +113,11 @@ def desenhar(g: dict, altura: int = 560):
         net.add_node(n["id"], label=n["label"], title=n["title"], x=n["x"], y=n["y"], physics=False,
                      shape=n["forma"], borderWidth=n["borda_largura"],
                      color={"background": n["cor"], "border": n["borda"]},
-                     font={"color": "#ffffff" if n["cor"] in claros else "#0b0f14", "size": 13})
+                     font={"color": "#ffffff" if n["cor"] in claros else "#111827", "size": 13,
+                           "face": "IBM Plex Sans"})
     for a in g["arestas"]:
         net.add_edge(a["origem"], a["destino"], color=a["cor"], width=a["largura"], dashes=a["tracejada"])
-    st.iframe(net.generate_html(), height=altura + 20)
+    st.iframe(ui.html_do_grafo(net), height=altura + 20)
 
 
 def legenda(tem_resultado: bool):
@@ -331,13 +333,9 @@ def excel(proc, resumos, op) -> bytes:
 
 
 # ---------------------------------------------------------------- página
-ui.html(f"""
-<div class="main-title">
-  <div class="eyebrow">ECOMUP · Modelos M4 e M5 · processos documentados</div>
-  <h1>Estudo Computacional de Otimização em Metodologias Utilizadas em Processos Industriais</h1>
-  <div class="subtitle"><b>Processos reais:</b> escolha um processo, mude a quantidade de trabalhadores e os tempos, e veja
-  <b>onde está o gargalo</b> no grafo.</div>
-</div>""")
+ui.cabecalho("Processos reais · modelos M4 e M5",
+             "Escolha um processo documentado, mude a quantidade de trabalhadores e os tempos, e veja "
+             "<b>onde está o gargalo</b> no grafo.")
 
 proc, op = barra_lateral()
 sig = assinatura(proc, op)

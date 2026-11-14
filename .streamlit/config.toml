@@ -1,16 +1,28 @@
-[theme.dark]
-primaryColor = "#58a6ff"
-backgroundColor = "#0b0f14"
-secondaryBackgroundColor = "#161b22"
-textColor = "#c9d1d9"
-borderColor = "#30363d"
+[theme]
+font = "IBM Plex Sans:https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap, sans-serif"
+codeFont = "IBM Plex Mono:https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap, monospace"
+baseFontSize = 15
+baseRadius = "8px"
+buttonRadius = "8px"
+showSidebarBorder = true
 
 [theme.light]
-primaryColor = "#0969da"
-backgroundColor = "#f6f8fa"
+primaryColor = "#1f5fbf"
+backgroundColor = "#f5f6f8"
 secondaryBackgroundColor = "#ffffff"
-textColor = "#1f2328"
-borderColor = "#d0d7de"
+textColor = "#1b2330"
+borderColor = "#dfe3e8"
+dataframeHeaderBackgroundColor = "#f3f5f8"
+chartCategoricalColors = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"]
+
+[theme.dark]
+primaryColor = "#4f8fe6"
+backgroundColor = "#0f1217"
+secondaryBackgroundColor = "#171c23"
+textColor = "#d5dae2"
+borderColor = "#2a313b"
+dataframeHeaderBackgroundColor = "#1b2129"
+chartCategoricalColors = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300"]
 
 [client]
 toolbarMode = "minimal"

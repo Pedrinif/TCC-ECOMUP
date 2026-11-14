@@ -12,20 +12,28 @@ from src.simulacao import MotorDES
 # estas aqui valem para os nossos cards, banners e gráficos.
 PALETAS = {
     "dark": {
-        "bg": "#0b0f14", "sidebar": "#0d1117", "surface": "#161b22", "border": "#30363d",
-        "border-soft": "#21262d", "text": "#c9d1d9", "text-strong": "#f0f6fc", "muted": "#8b949e",
-        "accent": "#58a6ff", "good": "#3fb950", "warn": "#d29922", "bad": "#f85149", "blue": "#388bfd",
-        "bad-bg": "#2b0f14", "bad-text": "#ffa198", "ok-bg": "#0e2a14", "ok-text": "#7ee787",
-        "glow": "rgba(88,166,255,0.10)", "shadow": "rgba(0,0,0,0.18)",
+        "bg": "#0f1217", "sidebar": "#12161c", "surface": "#171c23", "surface-2": "#1d232c",
+        "border": "#2a313b", "border-soft": "#20262e", "text": "#c3cad4", "text-strong": "#f1f4f8",
+        "muted": "#8a94a3", "accent": "#5b9df0", "blue": "#3987e5",
+        "good": "#0ca30c", "good-ink": "#35c235", "warn": "#fab219", "bad": "#e05252",
+        "shadow": "rgba(0,0,0,0.25)",
     },
     "light": {
-        "bg": "#f6f8fa", "sidebar": "#ffffff", "surface": "#ffffff", "border": "#d0d7de",
-        "border-soft": "#e5e9ee", "text": "#424a53", "text-strong": "#1f2328", "muted": "#656d76",
-        "accent": "#0969da", "good": "#1a7f37", "warn": "#9a6700", "bad": "#cf222e", "blue": "#0969da",
-        "bad-bg": "#ffebe9", "bad-text": "#a40e26", "ok-bg": "#dafbe1", "ok-text": "#116329",
-        "glow": "rgba(9,105,218,0.08)", "shadow": "rgba(31,35,40,0.08)",
+        "bg": "#f5f6f8", "sidebar": "#ffffff", "surface": "#ffffff", "surface-2": "#f1f3f6",
+        "border": "#dfe3e8", "border-soft": "#e9ecf0", "text": "#3b4350", "text-strong": "#111827",
+        "muted": "#667080", "accent": "#1f5fbf", "blue": "#2a78d6",
+        "good": "#0ca30c", "good-ink": "#0a7a0a", "warn": "#fab219", "bad": "#d03b3b",
+        "shadow": "rgba(17,24,39,0.06)",
     },
 }
+
+# Cores das séries nos gráficos, sempre nesta ordem (a 1ª série é azul, a 2ª laranja...).
+# A ordem foi conferida para continuar distinguível por quem tem daltonismo.
+SERIES = {
+    "dark": ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300"],
+    "light": ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"],
+}
+FONTE = "IBM Plex Sans, system-ui, sans-serif"
 
 
 def tema() -> str:
@@ -35,6 +43,10 @@ def tema() -> str:
 
 def paleta() -> Dict[str, str]:
     return PALETAS[tema()]
+
+
+def series() -> List[str]:
+    return SERIES[tema()]
 
 
 def css_do_tema() -> str:
@@ -51,28 +63,46 @@ def ico(nome: str) -> str:
     return f'<span class="ico">{nome}</span>'
 
 
+def cabecalho(contexto: str, subtitulo: str):
+    """Cabeçalho das duas páginas: marca, título do TG, o que a página faz e os autores."""
+    html(f"""
+    <div class="app-header">
+      <div class="brand-row">
+        <div class="brand"><span class="brand-mark">{ico("hub")}</span>
+          <span class="brand-name">ECOMUP</span><span class="brand-ctx">{contexto}</span></div>
+        <div class="brand-meta">Trabalho de Graduação · Engenharia de Computação · Universidade de Taubaté · 2026</div>
+      </div>
+      <h1>Estudo Computacional de Otimização em Metodologias Utilizadas em Processos Industriais</h1>
+      <div class="subtitle">{subtitulo}</div>
+      <div class="authors"><span>Miguel de Paulo Leite de Oliveira</span><span>Pedro Lauria Nassif</span>
+        <span>Orientador: Prof. Me. Julio Cesar Gonçalves</span></div>
+    </div>""")
+
+
 def botao_tema():
     """
-    Botão claro/escuro. O Streamlit guarda a escolha de tema no localStorage do navegador,
-    então gravamos lá e recarregamos a página (um iframe pequeno roda esse script).
+    Botão claro/escuro. O Streamlit guarda a escolha de tema no localStorage do navegador
+    (uma chave por endereço), então gravamos lá e recarregamos a página (um iframe pequeno roda esse script).
     """
     p = paleta()
     escuro = tema() == "dark"
     novo = "Light" if escuro else "Dark"
     st.iframe(f"""
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded&family=Inter:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded&family=IBM+Plex+Sans:wght@500&display=swap" rel="stylesheet">
     <style>
       body {{ margin: 0; }}
       button {{ width: 100%; height: 36px; display: flex; align-items: center; justify-content: center; gap: 8px;
                background: {p['surface']}; color: {p['text-strong']}; border: 1px solid {p['border']};
-               border-radius: 8px; font: 500 13px Inter, sans-serif; cursor: pointer; }}
+               border-radius: 8px; font: 500 13px 'IBM Plex Sans', sans-serif; cursor: pointer; }}
       button:hover {{ border-color: {p['accent']}; color: {p['accent']}; }}
       .i {{ font-family: 'Material Symbols Rounded'; font-size: 18px; }}
     </style>
     <button id="b"><span class="i">{'light_mode' if escuro else 'dark_mode'}</span>{'Modo claro' if escuro else 'Modo escuro'}</button>
     <script>
       document.getElementById('b').onclick = () => {{
-        parent.localStorage.setItem('stActiveTheme-/-v2', JSON.stringify('{novo}'));
+        // o Streamlit guarda o tema por endereço: grava no da página atual e no da página inicial
+        for (const caminho of new Set(['/', parent.location.pathname]))
+          parent.localStorage.setItem('stActiveTheme-' + caminho + '-v2', JSON.stringify('{novo}'));
         parent.location.reload();
       }};
     </script>""", height=40)
@@ -108,14 +138,43 @@ def banner(tipo: str, texto: str, compacto: bool = False):
          f'<span class="icon">{ico(icone)}</span><span class="text">{texto}</span></div>')
 
 
+def html_do_grafo(net: Network) -> str:
+    """HTML do pyvis com a nossa fonte e sem a moldura branca padrão em volta do desenho."""
+    p = paleta()
+    extra = f"""
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+      body {{ margin: 0; background: {p['surface']}; }}
+      .card, .card-body {{ border: 0 !important; padding: 0 !important; background: transparent !important; }}
+      #mynetwork {{ border: 0 !important; }}
+    </style>
+    <script>  // o texto é desenhado num canvas: redesenha quando a fonte termina de carregar
+      document.fonts.load('13px "IBM Plex Sans"').then(() => window.network && network.redraw());
+      // se a área mudar de tamanho (aba que estava escondida, janela estreita), enquadra o grafo de novo
+      window.addEventListener('load', () => new ResizeObserver(() => window.network && network.fit())
+        .observe(document.getElementById('mynetwork')));
+    </script>"""
+    pagina = net.generate_html().replace("</head>", extra + "</head>", 1)
+    pagina = pagina.replace('<script src="lib/bindings/utils.js"></script>', "")  # arquivo do pyvis que não existe aqui
+    return pagina.replace("IBMPlexSans", "IBM Plex Sans")  # o pyvis tira os espaços das opções
+
+
 def _estilo(grafico: alt.Chart, altura: int = 280) -> alt.Chart:
     """Aplica as cores do tema ativo (eixos, grade, legenda) em todos os gráficos."""
     p = paleta()
     return (
         grafico.properties(height=altura)
+        .configure(font=FONTE, background="transparent")
         .configure_view(strokeWidth=0)
-        .configure_axis(labelColor=p["muted"], titleColor=p["text"], gridColor=p["border-soft"], domainColor=p["border"])
-        .configure_legend(labelColor=p["text"], titleColor=p["muted"], orient="bottom")
+        .configure_range(category=series())
+        .configure_axis(labelColor=p["muted"], titleColor=p["muted"], gridColor=p["border-soft"],
+                        domainColor=p["border"], tickColor=p["border"], labelFontSize=12, titleFontSize=12,
+                        titleFontWeight=500, titlePadding=10, labelFont=FONTE, titleFont=FONTE)
+        .configure_legend(labelColor=p["text"], titleColor=p["muted"], orient="bottom", labelFontSize=12,
+                          titleFontSize=12, titleFontWeight=500, symbolSize=80, labelFont=FONTE, titleFont=FONTE)
+        .configure_bar(cornerRadiusEnd=4)
+        .configure_line(strokeWidth=2)
+        .configure_point(size=60)
     )
 
 
@@ -138,18 +197,20 @@ def grafo(linha: LinhaProducao, resultado: Optional[ResultadoSimulacao]):
     net.set_options("""{
       "physics": {"enabled": false},
       "edges": {"smooth": {"type": "curvedCW", "roundness": 0.15},
-                "font": {"size": 12, "color": "%s", "strokeWidth": 0, "background": "%s"}},
-      "nodes": {"font": {"multi": true, "size": 13}},
+                "font": {"size": 12, "face": "IBM Plex Sans", "color": "%s", "strokeWidth": 0, "background": "%s"}},
+      "nodes": {"font": {"multi": true, "size": 13, "face": "IBM Plex Sans"}},
       "interaction": {"hover": true, "tooltipDelay": 200}
     }""" % (p["muted"], p["surface"]))
 
     tamanho = {"doca": 55, "triagem": 48, "inspecao": 45, "estoque": 38}
+    azul, laranja, verde, amarelo = series()[:4]
+    cor_do_tipo = {"doca": azul, "inspecao": laranja, "triagem": amarelo, "estoque": verde}
     for no in linha.nos.values():
         dica = (f"<b>{no.id}</b><br>Tipo: {no.tipo}<br>Capacidade: {linha.capacidade_efetiva(no.id)} paletes"
-                f"<br>T. proc. base: {no.tempo_proc_base} min")
+                f"<br>T. proc. base: {no.tempo_proc_base} u.t.")
         net.add_node(no.id, label=no.rotulo, title=dica, size=tamanho.get(no.tipo, 40),
                      x=no.x, y=no.y, physics=False, borderWidth=2,
-                     color={"background": no.cor, "border": p["border"]})
+                     color={"background": cor_do_tipo.get(no.tipo, no.cor), "border": p["surface"]})
 
     gargalo = resultado is not None and resultado.gargalo_ativado
     for (orig, dest), aresta in linha.arestas.items():
@@ -160,7 +221,7 @@ def grafo(linha: LinhaProducao, resultado: Optional[ResultadoSimulacao]):
                      title=f"{orig} → {dest}<br>c={aresta.capacidade} · f={aresta.fluxo_atual} · {uso}%",
                      color=p["bad"] if saturada else p["blue"], width=5 if saturada else 3)
 
-    st.iframe(net.generate_html(), height=540)
+    st.iframe(html_do_grafo(net), height=540)
 
 
 def histograma_espera(tempos_espera: List[float]):
@@ -175,7 +236,7 @@ def histograma_espera(tempos_espera: List[float]):
              'significativa — o sistema fluiu sem filas.</div>')
         return
 
-    grafico = alt.Chart(pd.DataFrame({"espera": tempos_espera})).mark_bar(color=p["bad"]).encode(
+    grafico = alt.Chart(pd.DataFrame({"espera": tempos_espera})).mark_bar(color=p["blue"]).encode(
         x=alt.X("espera:Q", bin=alt.Bin(maxbins=25), title="Tempo de espera (u.t.)"),
         y=alt.Y("count()", title="Paletes"),
     )
@@ -224,10 +285,9 @@ def evolucao_filas(logs_detalhados: List[Dict[str, Any]], linha: LinhaProducao):
 
     nomes = {nid: no.rotulo.replace("\n", " ") for nid, no in linha.nos.items()}
     df["nome"] = df["estacao"].map(nomes)
-    cor_por_tipo = {"doca": p["blue"], "triagem": p["warn"], "estoque": p["good"], "inspecao": "#f0883e"}
-    cores = [cor_por_tipo.get(linha.nos[nid].tipo, p["muted"]) for nid in nomes]
+    cores = series()[:len(nomes)]  # uma cor por estação, sempre na mesma ordem
 
-    grafico = alt.Chart(df).mark_line(strokeWidth=2, interpolate="monotone").encode(
+    grafico = alt.Chart(df).mark_line(interpolate="monotone").encode(
         x=alt.X("tempo:Q", title="Tempo simulado (u.t.)"),
         y=alt.Y("tamanho_fila:Q", title="Tamanho da fila"),
         color=alt.Color("nome:N", title="Estação", scale=alt.Scale(domain=list(nomes.values()), range=cores)),
@@ -260,9 +320,12 @@ def comparativo_topologias(volume: int, capacidade: int, seed: int, presets: Dic
     df = pd.DataFrame(linhas)
     st.dataframe(df, hide_index=True, width="stretch")
 
-    grafico = alt.Chart(df).mark_bar(cornerRadiusEnd=4, color=paleta()["blue"]).encode(
-        x=alt.X("Topologia:N", title=None, axis=alt.Axis(labelAngle=0)),
-        y=alt.Y("Espera média (u.t.):Q"),
+    # o Vega lê o ponto de "(u.t.)" como campo aninhado, então o gráfico usa uma coluna de nome simples
+    grafico = alt.Chart(df.rename(columns={"Espera média (u.t.)": "espera"})).mark_bar(
+        color=paleta()["blue"], size=72).encode(
+        x=alt.X("Topologia:N", title=None, axis=alt.Axis(labelAngle=0, labelLimit=260)),
+        y=alt.Y("espera:Q", title="Espera média (u.t.)"),
+        tooltip=["Topologia", alt.Tooltip("espera:Q", title="Espera média (u.t.)")],
     )
     st.altair_chart(_estilo(grafico), width="stretch")
 
@@ -281,8 +344,8 @@ def curvas_saturacao(resultados_batch: List[Dict[str, Any]], volume: int, preset
     df = pd.DataFrame(resultados_batch)
     col1, col2 = st.columns(2)
     for col, campo, titulo, cor in [
-        (col1, "tempo_medio_espera", "Tempo médio de espera (u.t.)", p["bad"]),
-        (col2, "pct_com_espera", "% de paletes com espera", p["warn"]),
+        (col1, "tempo_medio_espera", "Tempo médio de espera (u.t.)", series()[0]),
+        (col2, "pct_com_espera", "% de paletes com espera", series()[1]),
     ]:
         grafico = alt.Chart(df).mark_line(point=True, color=cor).encode(
             x=alt.X("capacidade:Q", title="Capacidade c(u,v)"),

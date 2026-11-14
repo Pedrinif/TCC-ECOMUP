@@ -135,6 +135,7 @@ def analise_estrutural(proc: Processo) -> dict:
     """Junta tudo para exibir/exportar."""
     return {
         "capacidades": capacidade_por_pool(proc),
+        "cargas": carga_por_pool(proc),
         "trabalhadores_necessarios": trabalhadores_necessarios(proc),
         "gargalo_capacidade": gargalo_por_capacidade(proc),
         "cpm": cpm(proc),

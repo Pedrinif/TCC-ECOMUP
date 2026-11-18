@@ -29,7 +29,7 @@ e estima quantos trabalhadores alocar em cada grupo.
 ## Como abrir o programa
 
 ```bash
-cd TCC-Project && .venv/bin/streamlit run app.py
+cd TCC-ECOMUP && .venv/bin/streamlit run app.py
 ```
 
 Depois abra `http://localhost:8501` no navegador. Para fechar, `Ctrl + C` no terminal.

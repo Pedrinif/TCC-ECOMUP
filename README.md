@@ -9,7 +9,7 @@ Processos industriais e logísticos são modelados como **grafos direcionados** 
 **simulação de eventos discretos** com réplicas e intervalo de confiança de 95%. O sistema aponta o gargalo
 e estima quantos trabalhadores alocar em cada grupo.
 
-**Status:** Trabalho de Graduação defendido e aprovado em banca (novembro de 2026).
+**Status:** Trabalho de Graduação defendido e aprovado em banca em 17 de novembro de 2026.
 
 ## O que o trabalho mostra
 

@@ -9,6 +9,21 @@ Processos industriais e logísticos são modelados como **grafos direcionados** 
 **simulação de eventos discretos** com réplicas e intervalo de confiança de 95%. O sistema aponta o gargalo
 e estima quantos trabalhadores alocar em cada grupo.
 
+**Status:** Trabalho de Graduação defendido e aprovado em banca (novembro de 2026).
+
+## O que o trabalho mostra
+
+- A **análise estrutural** aponta o recurso limitante antes de simular, e a **simulação** confirma esse
+  gargalo na forma de filas e mede o efeito de intervenções.
+- No recebimento de paletes (M4), a estimativa de **17 conferentes** coincide com o ponto em que a fila
+  praticamente desaparece. A utilização isolada engana: a empilhadeira, com cerca de um terço de utilização,
+  concentra toda a espera.
+- Na alocação de trabalhadores, a busca gulosa alcança o mesmo custo da exaustiva com bem menos avaliações
+  (62 contra 577 no limite de 120 s); o recozimento simulado é menos estável entre sementes.
+- O tempo e a memória da simulação crescem de forma aproximadamente linear com o tamanho do processo.
+- Limite declarado: os modelos foram verificados contra fórmulas de filas e dados publicados, mas não contra
+  dados de uma operação real (trabalho futuro).
+
 ---
 
 ## Como abrir o programa
